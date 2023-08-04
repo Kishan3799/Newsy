@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        style="@style/Widget.App.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/app_name"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.Material3.ActionBar.Title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/app_bar"
+        android:padding="8dp"
+        android:scrollbars="none"
+        android:id="@+id/buttonLayout"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp"
+            >
+
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="8dp"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/business"
+                android:layout_marginHorizontal="8dp"
+                android:textSize="18sp"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/entertainment"
+                android:layout_marginHorizontal="8dp"
+                android:textSize="18sp"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/technology"
+                android:layout_marginHorizontal="8dp"
+                android:textSize="18sp"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/health"
+                android:layout_marginHorizontal="8dp"
+                android:textSize="18sp"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/science"
+                android:layout_marginHorizontal="8dp"
+                android:textSize="18sp"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sports"
+                android:layout_marginHorizontal="8dp"
+                android:textSize="18sp"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:indicatorColor="@color/seed"
+        app:layout_constraintBottom_toBottomOf="@+id/newsRV"
+        app:layout_constraintEnd_toEndOf="@+id/newsRV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/newsRV" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/newsRV"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLayout"
+        tools:listitem="@layout/news_item_card"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
