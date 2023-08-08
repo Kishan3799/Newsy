@@ -16,6 +16,8 @@ interface NewsApi {
         @Query("country")
         countryCode:String = "in",
         @Query("category")
-        newsCategory:String = "general"
+        newsCategory:String = "general",
+        @Query("page")
+        page:Int = 1
     ): Response<NewsArticlesDto>
 }

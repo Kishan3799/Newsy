@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/newsImage"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="210dp"
             android:scaleType="center"
             tools:srcCompat="@tools:sample/backgrounds/scenic"
             android:contentDescription="TODO" />
@@ -27,7 +27,7 @@
             android:padding="16dp"
             >
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/newsTitle"
                 android:text="Title"
@@ -38,7 +38,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:id="@+id/saveNews"
-                android:src="@drawable/twotone_bookmark_24"
+                android:src="@drawable/outline_bookmark_border_24"
                 android:layout_alignParentEnd="true"
                 />
         </RelativeLayout>
