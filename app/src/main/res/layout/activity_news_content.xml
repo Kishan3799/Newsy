@@ -16,8 +16,7 @@
        app:layout_constraintTop_toTopOf="parent"
        android:layout_marginTop="18dp"
        android:layout_marginStart="18dp"
-       android:contentDescription="null"
-        />
+       android:contentDescription="null"/>
 
     <ImageView
         android:layout_width="30dp"
@@ -27,48 +26,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="18dp"
-        android:layout_marginEnd="18dp"
-/>
+        android:layout_marginEnd="18dp"/>
 
-    <androidx.core.widget.NestedScrollView
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back_screen_button"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textSize="30sp"
-                android:paddingHorizontal="12dp"/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="News Ccontent"
-                android:textSize="18sp"
-                android:padding="12dp"/>
-
-        </LinearLayout>
-
-
-    </androidx.core.widget.NestedScrollView>
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/back_screen_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
