@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.kishan.newsy.data.remote.NewsApi
 import com.kishan.newsy.data.remote.RetrofitService
 import com.kishan.newsy.database.ArticleDatabase
+import com.kishan.newsy.model.Article
 import com.kishan.newsy.model.NewsArticlesDto
 
 class NewsRepository(
@@ -27,4 +28,10 @@ class NewsRepository(
 
     suspend fun getTopHeadLineNews(newsCategory:String, newsPage: Int) =
         RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = newsCategory, page = newsPage)
+
+    suspend fun upsert(article: Article) = db.getArticleDao().upsert(article)
+
+    fun gettingSavedNews() = db.getArticleDao().getAllArticles()
+
+    suspend fun deleteNews(article: Article) = db.getArticleDao().deleteArticle(article)
 }

@@ -3,6 +3,9 @@ package com.kishan.newsy
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -79,32 +82,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             btn.setOnClickListener(this@MainActivity)
         }
 
+        //important for toolbar
+        setSupportActionBar(binding.topAppBar)
 
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.save_article -> {
+//                Toast.makeText(this,"clicked" ,Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this,SavedNewsActivity::class.java))
+                return true
+            }
+        }
 
-//        val newsyApi = RetrofitService.getInstance().create(NewsApi::class.java)
-//        val repository = NewsRepository(newsyApi)
-//
-//        newsAdapter = NewsAdapter()
-//
-
-//
-//        mainViewModel.article.observe(this, Observer {
-//            binding.progressCircular.visibility =View.GONE
-//            it.articles?.let { newsResponse ->
-//                newsAdapter.differ.submitList(newsResponse)
-//            }
-//            binding.newsRV.apply {
-//                layoutManager = LinearLayoutManager(this@MainActivity)
-//                adapter = newsAdapter
-//            }
-//        })
-//
-
-
-
-
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onClick(view: View?) {
@@ -123,6 +120,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             layoutManager = LinearLayoutManager(this@MainActivity)
         }
     }
+
+
+
 
 
 }

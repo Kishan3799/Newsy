@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewsContentActivity">
+    tools:context=".NewsContentActivity"
+    android:id="@+id/newsContent"
+    android:background="@color/md_theme_light_onPrimary">
 
     <ImageView
        android:layout_width="30dp"
@@ -21,6 +23,7 @@
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:id="@+id/saveBtn"
         android:src="@drawable/outline_bookmark_add_24"
         app:tint = "@color/md_theme_dark_scrim"
         app:layout_constraintEnd_toEndOf="parent"

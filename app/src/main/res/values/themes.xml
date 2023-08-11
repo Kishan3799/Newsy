@@ -33,7 +33,7 @@
 
     <style name="Theme.Newsy" parent="Base.Theme.Newsy" />
     
-    <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>
     </style>
 

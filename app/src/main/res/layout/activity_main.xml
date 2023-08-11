@@ -17,9 +17,13 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             app:title="@string/app_name"
+            app:menu="@menu/menu"
+            android:id="@+id/top_app_bar"
             app:titleCentered="true"
+            android:minHeight="?attr/actionBarSize"
+            style="@style/Widget.App.Toolbar"
             app:titleTextAppearance="@style/TextAppearance.Material3.ActionBar.Title" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -105,15 +109,6 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <ProgressBar
-        android:id="@+id/progress_circular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:indicatorColor="@color/seed"
-        app:layout_constraintBottom_toBottomOf="@+id/newsRV"
-        app:layout_constraintEnd_toEndOf="@+id/newsRV"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/newsRV" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -124,6 +119,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLayout"
         tools:listitem="@layout/news_item_card"/>
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:indicatorColor="@color/seed"
+        app:layout_constraintBottom_toBottomOf="@+id/newsRV"
+        app:layout_constraintEnd_toEndOf="@+id/newsRV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/newsRV" />
 
 
 

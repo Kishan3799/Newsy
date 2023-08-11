@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
 import com.kishan.newsy.data.repository.NewsRepository
+import com.kishan.newsy.model.Article
 import com.kishan.newsy.model.NewsArticlesDto
 import com.kishan.newsy.utils.Resource
 import kotlinx.coroutines.launch
@@ -37,6 +38,16 @@ class MainViewModel(
         }
 
         return Resource.Error(response.message())
+    }
+
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        repository.upsert(article)
+    }
+
+    fun getAllArticles() = repository.gettingSavedNews()
+
+    fun delete(article: Article) = viewModelScope.launch {
+        repository.deleteNews(article)
     }
 
 //    init {

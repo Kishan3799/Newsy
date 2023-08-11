@@ -9,7 +9,7 @@ import com.kishan.newsy.model.Article
 
 @Database(
     entities = [Article::class],
-    version = 1,
+    version = 2,
 )
 @TypeConverters(Converter::class)
 abstract class ArticleDatabase :RoomDatabase() {
@@ -30,6 +30,7 @@ abstract class ArticleDatabase :RoomDatabase() {
                 context.applicationContext,
                 ArticleDatabase::class.java,
                 "article_database.db"
-            ).build()
+            ).fallbackToDestructiveMigration()
+                .build()
     }
 }
