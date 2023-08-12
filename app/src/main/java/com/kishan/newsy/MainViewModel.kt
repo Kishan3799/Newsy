@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 
 import com.kishan.newsy.data.repository.NewsRepository
 import com.kishan.newsy.model.Article
-import com.kishan.newsy.model.NewsArticlesDto
+import com.kishan.newsy.model.NewsArticlesResponse
 import com.kishan.newsy.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -17,8 +17,9 @@ class MainViewModel(
     private val repository: NewsRepository
     ) : ViewModel() {
 
-    val topHeadlines : MutableLiveData<Resource<NewsArticlesDto>> = MutableLiveData()
-    val topHeadlinePage = 1
+    val topHeadlines : MutableLiveData<Resource<NewsArticlesResponse>> = MutableLiveData()
+    var topHeadlinePage = 1
+    var topHeadlinesResponse: NewsArticlesResponse? = null
 
     init {
         getTopHeadLineNews("general")
@@ -30,10 +31,18 @@ class MainViewModel(
         topHeadlines.postValue(handlingTopHeadlineResponse(response))
     }
 
-    fun handlingTopHeadlineResponse(response: Response<NewsArticlesDto>) : Resource<NewsArticlesDto> {
+    fun handlingTopHeadlineResponse(response: Response<NewsArticlesResponse>) : Resource<NewsArticlesResponse> {
         if (response.isSuccessful){
             response.body()?.let { resultResponse ->
-                return Resource.Success(resultResponse)
+                topHeadlinePage++
+                if(topHeadlinesResponse == null){
+                    topHeadlinesResponse = resultResponse
+                } else {
+                    val oldArticle = topHeadlinesResponse?.articles
+                    val newArticle = resultResponse.articles
+                    oldArticle?.addAll(newArticle)
+                }
+                return Resource.Success(topHeadlinesResponse ?: resultResponse)
             }
         }
 
@@ -50,14 +59,6 @@ class MainViewModel(
         repository.deleteNews(article)
     }
 
-//    init {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repository.getTopHeadLineNews(category = "general", page = 1)
-//        }
-//    }
-//
-//    val article : LiveData<NewsArticlesDto>
-//        get() = repository.articles
 
 
 

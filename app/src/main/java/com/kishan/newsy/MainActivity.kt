@@ -7,12 +7,14 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.AbsListView
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.kishan.newsy.adapter.NewsAdapter
 import com.kishan.newsy.data.remote.NewsApi
 import com.kishan.newsy.data.remote.RetrofitService
@@ -24,19 +26,31 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.http.Query
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(),View.OnClickListener{
     private lateinit var binding: ActivityMainBinding
     private lateinit var newsAdapter:NewsAdapter
     lateinit var mainViewModel: MainViewModel
 
     val MY_TAG = "TopHeadlinesNews"
+    companion object {
+        const val QUERY_PAGE_SIZE = 20
+    }
 
+
+    lateinit var button: Button
+    var category: String = ""
+
+    var isLoad = false
+    var isLastPage = false
+    var isScrolling = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val newsRepository = NewsRepository(ArticleDatabase(this))
         mainViewModel = ViewModelProvider(this, MainViewModelFactory(newsRepository)).get(MainViewModel::class.java)
         setupRecyclerView()
@@ -51,19 +65,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mainViewModel.topHeadlines.observe(this, Observer { response ->
             when(response){
                 is Resource.Success -> {
-                    binding.progressCircular.visibility = View.GONE
+                   hideProgressBar()
                     response.data?.let { newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.articles)
+                        newsAdapter.differ.submitList(newsResponse.articles.toList())
+                        val totalPage = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
+                        isLastPage= mainViewModel.topHeadlinePage == totalPage
+                        if(isLastPage) {
+                            binding.newsRV.setPadding(0,0,0,0)
+                        }
                     }
                 }
                 is Resource.Error -> {
-                    binding.progressCircular.visibility = View.GONE
+                  hideProgressBar()
                     response.message?.let { message ->
                         Log.e(MY_TAG, "An Error occured : $message")
                     }
                 }
                 is Resource.Loading -> {
-                    binding.progressCircular.visibility =View.VISIBLE
+                   showProgressBar()
                 }
             }
         })
@@ -79,7 +98,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         )
 
         button.forEach{btn->
-            btn.setOnClickListener(this@MainActivity)
+            btn.setOnClickListener(this)
         }
 
         //important for toolbar
@@ -105,11 +124,40 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        val button = view as Button
-        val category = button.text.toString()
+        button = view as Button
+        category = button.text.toString()
         binding.progressCircular.visibility = View.VISIBLE
         mainViewModel.getTopHeadLineNews(category)
         binding.progressCircular.visibility = View.GONE
+
+    }
+
+    val scrollListener = object : RecyclerView.OnScrollListener(){
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                isScrolling = true
+            }
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+
+            val isNotLoadingAndNotLastPage = !isLoad && !isLastPage
+            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+            val isNotAtBeginning = firstVisibleItemPosition >= 0
+            val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
+            if(shouldPaginate) {
+                mainViewModel.getTopHeadLineNews(category)
+                isScrolling = false
+            }
+        }
 
     }
 
@@ -118,11 +166,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.newsRV.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(this@MainActivity)
+            addOnScrollListener(this@MainActivity.scrollListener)
         }
     }
 
+    private fun hideProgressBar(){
+        binding.progressCircular.visibility = View.GONE
+        isLoad = false
+    }
 
-
-
+    private fun showProgressBar(){
+        binding.progressCircular.visibility = View.VISIBLE
+        isLoad = true
+    }
 
 }

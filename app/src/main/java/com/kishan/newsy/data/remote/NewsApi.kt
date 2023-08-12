@@ -1,11 +1,9 @@
 package com.kishan.newsy.data.remote
 
 import com.kishan.newsy.BuildConfig
-import com.kishan.newsy.model.NewsArticlesDto
-import retrofit2.Call
+import com.kishan.newsy.model.NewsArticlesResponse
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
@@ -19,5 +17,5 @@ interface NewsApi {
         newsCategory:String = "general",
         @Query("page")
         page:Int = 1
-    ): Response<NewsArticlesDto>
+    ): Response<NewsArticlesResponse>
 }

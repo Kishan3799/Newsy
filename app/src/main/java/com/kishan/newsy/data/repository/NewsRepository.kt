@@ -1,13 +1,10 @@
 package com.kishan.newsy.data.repository
 
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.kishan.newsy.data.remote.NewsApi
 import com.kishan.newsy.data.remote.RetrofitService
 import com.kishan.newsy.database.ArticleDatabase
 import com.kishan.newsy.model.Article
-import com.kishan.newsy.model.NewsArticlesDto
 
 class NewsRepository(
 //    private val newsResponse: NewsApi
