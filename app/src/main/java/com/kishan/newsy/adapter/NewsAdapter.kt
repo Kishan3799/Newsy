@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kishan.newsy.R
 import com.kishan.newsy.databinding.NewsItemCardBinding
 import com.kishan.newsy.model.Article
 import java.time.Instant
@@ -49,7 +50,11 @@ class NewsAdapter :RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         val article = differ.currentList[position]
 
         holder.itemView.apply {
-            Glide.with(this).load(article.urlToImage).into(holder.binding.newsImage)
+            if (article.urlToImage == null){
+                holder.binding.newsImage.setImageResource(R.drawable.newsyimage)
+            } else {
+                Glide.with(this).load(article.urlToImage).into(holder.binding.newsImage)
+            }
             holder.binding.newsTitle.text = article!!.title
             holder.binding.newsDesc.text = article.description
             article.publishedAt?.let { dateFormatter(it, holder.binding.newsPublished) }

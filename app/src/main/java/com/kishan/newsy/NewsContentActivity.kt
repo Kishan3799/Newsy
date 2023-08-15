@@ -21,7 +21,7 @@ class NewsContentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val newsRepository = NewsRepository(ArticleDatabase(this))
-        mainViewModel = ViewModelProvider(this, MainViewModelFactory(newsRepository)).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProvider(this, MainViewModelFactory(application,newsRepository)).get(MainViewModel::class.java)
         binding = ActivityNewsContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
