@@ -17,9 +17,9 @@
             android:id="@+id/newsImage"
             android:layout_width="match_parent"
             android:layout_height="210dp"
-            android:scaleType="center"
+            android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/backgrounds/scenic"
-            android:contentDescription="TODO" />
+            android:contentDescription="null" />
 
         <RelativeLayout
             android:layout_width="match_parent"

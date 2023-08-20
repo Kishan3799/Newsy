@@ -1,12 +1,14 @@
-package com.kishan.newsy
+package com.kishan.newsy.ui.activity
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.WebViewClient
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.kishan.newsy.MainViewModel
+import com.kishan.newsy.MainViewModelFactory
+import com.kishan.newsy.R
 import com.kishan.newsy.data.repository.NewsRepository
 import com.kishan.newsy.database.ArticleDatabase
 import com.kishan.newsy.databinding.ActivityNewsContentBinding
@@ -21,7 +23,7 @@ class NewsContentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val newsRepository = NewsRepository(ArticleDatabase(this))
-        mainViewModel = ViewModelProvider(this, MainViewModelFactory(application,newsRepository)).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProvider(this, MainViewModelFactory(application,newsRepository))[MainViewModel::class.java]
         binding = ActivityNewsContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

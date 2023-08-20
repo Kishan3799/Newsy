@@ -7,24 +7,36 @@ import com.kishan.newsy.database.ArticleDatabase
 import com.kishan.newsy.model.Article
 
 class NewsRepository(
-//    private val newsResponse: NewsApi
-    val db : ArticleDatabase
+    private val db : ArticleDatabase
     ){
 
-//    private val articleLiveData = MutableLiveData<NewsArticlesDto>()
-//
-//    val articles:LiveData<NewsArticlesDto>
-//        get() = articleLiveData
-//
-//     suspend fun getTopHeadLineNews(category: String, page:Int){
-//        val result = newsResponse.getAllArticles(newsCategory = category, page = page)
-//         if(result.body() != null){
-//             articleLiveData.postValue(result.body())
-//         }
-//     }
+    //General News
+    suspend fun getTopHeadLineNews(newsPage: Int) =
+        RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = "general", page = newsPage)
 
-    suspend fun getTopHeadLineNews(newsCategory:String, newsPage: Int) =
-        RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = newsCategory, page = newsPage)
+    //Business News
+    suspend fun getBusinessNews(newsPage: Int) =
+        RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = "business", page = newsPage)
+
+    //Entertainment News
+    suspend fun getEntertainmentNews(newsPage: Int) =
+        RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = "entertainment", page = newsPage)
+
+    //Health News
+    suspend fun getHealthNews(newsPage: Int) =
+        RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = "health", page = newsPage)
+
+    //Science News
+    suspend fun getScienceNews(newsPage: Int) =
+        RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = "science", page = newsPage)
+
+    //Sports News
+    suspend fun getSportsNews(newsPage: Int) =
+        RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = "sports", page = newsPage)
+
+    // Technology News
+    suspend fun getTechnologyNews(newsPage: Int) =
+        RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = "technology", page = newsPage)
 
     suspend fun upsert(article: Article) = db.getArticleDao().upsert(article)
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewsContentActivity"
+    tools:context=".ui.activity.NewsContentActivity"
     android:id="@+id/newsContent"
     android:background="@color/md_theme_light_onPrimary">
 

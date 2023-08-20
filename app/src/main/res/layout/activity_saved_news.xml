@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SavedNewsActivity"
+    tools:context=".ui.activity.SavedNewsActivity"
     android:id="@+id/savedNews">
 
     <com.google.android.material.appbar.AppBarLayout

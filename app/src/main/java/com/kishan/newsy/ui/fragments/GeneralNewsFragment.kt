@@ -1,66 +1,57 @@
-package com.kishan.newsy
+package com.kishan.newsy.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.AbsListView
-import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kishan.newsy.ui.activity.MainActivity
+import com.kishan.newsy.ui.activity.MainActivity.Companion.QUERY_PAGE_SIZE
+import com.kishan.newsy.MainViewModel
+import com.kishan.newsy.ui.activity.NewsContentActivity
+import com.kishan.newsy.R
 import com.kishan.newsy.adapter.NewsAdapter
-import com.kishan.newsy.data.repository.NewsRepository
-import com.kishan.newsy.database.ArticleDatabase
-import com.kishan.newsy.databinding.ActivityMainBinding
 import com.kishan.newsy.utils.Resource
 
-
-class MainActivity : AppCompatActivity(),View.OnClickListener{
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var newsAdapter:NewsAdapter
+class GeneralNewsFragment : Fragment(R.layout.general_news_fragment) {
     lateinit var mainViewModel: MainViewModel
-
-    companion object {
-        const val QUERY_PAGE_SIZE = 20
-    }
-
-
-    private lateinit var button: Button
-    var category: String = ""
+    lateinit var newsAdapter: NewsAdapter
+    lateinit var generalNewsRecyclerView: RecyclerView
+    lateinit var progressCircularBar: ProgressBar
 
     var isLoad = false
     var isLastPage = false
     var isScrolling = false
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val newsRepository = NewsRepository(ArticleDatabase(this))
-        mainViewModel = ViewModelProvider(this, MainViewModelFactory(application, newsRepository)).get(MainViewModel::class.java)
+        progressCircularBar = view.findViewById(R.id.progress_circular)
+        generalNewsRecyclerView = view.findViewById(R.id.generalRv)
+
+        mainViewModel = (activity as MainActivity).mainViewModel
+        mainViewModel.getTopHeadLineNews()
         setupRecyclerView()
 
         newsAdapter.setOnItemClickListener {
-            val intent = Intent(this, NewsContentActivity::class.java)
+            val intent = Intent(requireContext(), NewsContentActivity::class.java)
             intent.putExtra("article", it)
             startActivity(intent)
         }
 
-
-        mainViewModel.topHeadlines.observe(this) { response ->
+        mainViewModel.topHeadlines.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles.toList())
-                        val totalPage = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
+                        val totalPage = newsResponse.totalResults / MainActivity.QUERY_PAGE_SIZE + 2
                         isLastPage = mainViewModel.topHeadlinePage == totalPage
                         if (isLastPage) {
-                            binding.newsRV.setPadding(0, 0, 0, 0)
+                            generalNewsRecyclerView.setPadding(0, 0, 0, 0)
                         }
                     }
                 }
@@ -69,7 +60,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener{
                     hideProgressBar()
                     response.message?.let { message ->
                         Toast.makeText(
-                            this,
+                            requireContext(),
                             "Please Check Your Internet Connection ",
                             Toast.LENGTH_LONG
                         ).show()
@@ -82,49 +73,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener{
             }
         }
 
-        val button = listOf(
-            binding.allBtn,
-            binding.businessBtn,
-            binding.healthBtn,
-            binding.entertainmentBtn,
-            binding.scienceBtn,
-            binding.techBtn,
-            binding.sportsBtn
-        )
 
-        button.forEach{btn->
-            btn.setOnClickListener(this)
-        }
-
-        //important for toolbar
-        setSupportActionBar(binding.topAppBar)
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.save_article -> {
-//                Toast.makeText(this,"clicked" ,Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this,SavedNewsActivity::class.java))
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onClick(view: View?) {
-        button = view as Button
-        category = button.text.toString()
-        binding.progressCircular.visibility = View.VISIBLE
-        mainViewModel.getTopHeadLineNews(category)
-        binding.progressCircular.visibility = View.GONE
-
+        
     }
 
     private val scrollListener = object : RecyclerView.OnScrollListener(){
@@ -149,30 +99,30 @@ class MainActivity : AppCompatActivity(),View.OnClickListener{
             val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
             if(shouldPaginate) {
-                mainViewModel.getTopHeadLineNews(category)
+                mainViewModel.getTopHeadLineNews()
                 isScrolling = false
             }
         }
-
     }
 
     private fun setupRecyclerView(){
         newsAdapter = NewsAdapter()
-        binding.newsRV.apply {
+        generalNewsRecyclerView.apply {
             adapter = newsAdapter
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            addOnScrollListener(this@MainActivity.scrollListener)
+            layoutManager = LinearLayoutManager(requireContext())
+            addOnScrollListener(this@GeneralNewsFragment.scrollListener)
         }
     }
 
     private fun hideProgressBar(){
-        binding.progressCircular.visibility = View.GONE
+        progressCircularBar.visibility = View.GONE
         isLoad = false
     }
 
     private fun showProgressBar(){
-        binding.progressCircular.visibility = View.VISIBLE
+        progressCircularBar.visibility = View.VISIBLE
         isLoad = true
     }
+
 
 }

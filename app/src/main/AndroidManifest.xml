@@ -17,13 +17,13 @@
         android:theme="@style/Theme.Newsy"
         tools:targetApi="31">
         <activity
-            android:name=".SavedNewsActivity"
+            android:name=".ui.activity.SavedNewsActivity"
             android:exported="false" />
         <activity
-            android:name=".NewsContentActivity"
+            android:name=".ui.activity.NewsContentActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
