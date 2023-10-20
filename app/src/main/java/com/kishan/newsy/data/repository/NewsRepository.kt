@@ -5,6 +5,7 @@ import com.kishan.newsy.data.remote.NewsApi
 import com.kishan.newsy.data.remote.RetrofitService
 import com.kishan.newsy.database.ArticleDatabase
 import com.kishan.newsy.model.Article
+import retrofit2.create
 
 class NewsRepository(
     private val db : ArticleDatabase
@@ -38,9 +39,15 @@ class NewsRepository(
     suspend fun getTechnologyNews(newsPage: Int) =
         RetrofitService.getInstance().create(NewsApi::class.java).getAllArticles(newsCategory = "technology", page = newsPage)
 
+    //Searching News
+    suspend fun searchNews(searchQuery:String, newsPage:Int) =
+        RetrofitService.getInstance().create(NewsApi::class.java).getSearchNews(searchQuery, newsPage)
+    //insert and update the articles
     suspend fun upsert(article: Article) = db.getArticleDao().upsert(article)
 
+    //saving news Articles
     fun gettingSavedNews() = db.getArticleDao().getAllArticles()
 
+    //deleting news Articles
     suspend fun deleteNews(article: Article) = db.getArticleDao().deleteArticle(article)
 }

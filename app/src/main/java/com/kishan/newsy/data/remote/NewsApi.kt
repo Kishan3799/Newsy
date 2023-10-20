@@ -18,4 +18,13 @@ interface NewsApi {
         @Query("page")
         page:Int = 1
     ): Response<NewsArticlesResponse>
+
+    @Headers("Authorization: ${BuildConfig.API_KEY}")
+    @GET("/v2/everything")
+    suspend fun getSearchNews(
+        @Query("q")
+        searchQuery: String,
+        @Query("page")
+        page: Int = 1
+    ):Response<NewsArticlesResponse>
 }

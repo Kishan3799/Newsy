@@ -64,6 +64,13 @@ class MainViewModel(
     var technologyNewsPage = 1
     private var technologyNewsResponse : NewsArticlesResponse? = null
 
+    //search News
+    val searchNews : MutableLiveData<Resource<NewsArticlesResponse>> = MutableLiveData()
+    var searchNewsPage = 1
+    var searchNewsResponse : NewsArticlesResponse? = null
+    var newSearchQuery:String? = null
+    var oldSearchQuery:String? = null
+
 
     init {
         getTopHeadLineNews()
@@ -104,6 +111,10 @@ class MainViewModel(
         safeTechnologyNewsCalls()
     }
 
+    // searchNews Response
+    fun searchNews(query:String) = viewModelScope.launch {
+        safeSearchNewsCalls(query)
+    }
 
     private fun handlingTopHeadlineResponse(response: Response<NewsArticlesResponse>) : Resource<NewsArticlesResponse> {
         if (response.isSuccessful){
@@ -372,6 +383,46 @@ class MainViewModel(
             }
         }
     }
+
+    private fun handleSearchNewsResponse(response: Response<NewsArticlesResponse>): Resource<NewsArticlesResponse>{
+        if(response.isSuccessful){
+            response.body()?.let { resultResponse ->
+                if(searchNewsResponse == null || newSearchQuery != oldSearchQuery){
+                    searchNewsPage = 1
+                    oldSearchQuery = newSearchQuery
+                    searchNewsResponse = resultResponse
+                }else {
+                    searchNewsPage++
+                    val oldArticles = searchNewsResponse?.articles
+                    val newArticles = resultResponse.articles
+                    oldArticles?.addAll(newArticles)
+                }
+                return Resource.Success(searchNewsResponse ?: resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    //search news calls
+    private suspend fun safeSearchNewsCalls(query: String){
+        newSearchQuery = query
+        searchNews.postValue(Resource.Loading())
+        try {
+            if(hasInternetConnection()){
+                val response = repository.searchNews(query, searchNewsPage)
+                searchNews.postValue(handleSearchNewsResponse(response))
+            }else{
+                searchNews.postValue(Resource.Error("No Internet Connection"))
+            }
+        }catch(t: Throwable) {
+            when(t) {
+                is IOException -> searchNews.postValue(Resource.Error("Network Failure"))
+                else -> searchNews.postValue(Resource.Error("Conversion Error"))
+            }
+        }
+    }
+
+
 
 
     private fun hasInternetConnection(): Boolean {

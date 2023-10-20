@@ -86,6 +86,10 @@ class MainActivity : AppCompatActivity(){
                 startActivity(Intent(this, SavedNewsActivity::class.java))
                 return true
             }
+            R.id.searchNews -> {
+                startActivity(Intent(this, SearchNewsActivity::class.java))
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }

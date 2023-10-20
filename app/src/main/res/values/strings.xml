@@ -8,4 +8,7 @@
     <string name="science">Science</string>
     <string name="sports">Sports</string>
     <string name="saved_article">Saved Article</string>
+    <string name="search_articles">Search Articles</string>
+    <string name="bitcoin">bitcoin</string>
+    <string name="searching_news_hear">Searching news hear</string>
 </resources>

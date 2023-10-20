@@ -9,6 +9,12 @@
         android:id="@+id/save_article"
         android:icon="@drawable/baseline_description_24"
         android:title="@string/saved_article"
-        app:showAsAction="never" />
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/searchNews"
+        android:icon="@drawable/baseline_search_24"
+        android:title="@string/search_articles"
+        app:showAsAction="withText"
+        />
 
 </menu>
